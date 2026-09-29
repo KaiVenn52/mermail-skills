@@ -2003,6 +2003,10 @@ const releaseEvidenceSecurity = await readFile(
   path.join(releaseEvidenceDir, "references", "security.md"),
   "utf8",
 );
+const releaseEvidenceTools = await readFile(
+  path.join(releaseEvidenceDir, "references", "tools.md"),
+  "utf8",
+);
 for (const required of [
   "supplies an exact stable message ID",
   "Display it in chat by default",
@@ -2029,6 +2033,7 @@ for (const required of [
 }
 for (const required of [
   "Freeze product",
+  "metadata_only",
   "sender_authentication.status === pass",
   "authenticated mailbox's own outbound record",
   "delivery_status: delivered",
@@ -2038,6 +2043,11 @@ for (const required of [
 ]) {
   if (!releaseEvidenceSecurity.includes(required)) {
     errors.push(`mermail-release-evidence-gate: missing security contract ${required}`);
+  }
+}
+for (const required of ["metadata_only", "agent_safe_content", "max_body_chars", "Do not use a bare"]) {
+  if (!releaseEvidenceTools.includes(required)) {
+    errors.push(`mermail-release-evidence-gate: missing bounded exact-ID read contract ${required}`);
   }
 }
 for (const expected of [
